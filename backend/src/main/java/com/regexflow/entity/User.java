@@ -1,0 +1,57 @@
+package com.regexflow.entity;
+
+import com.regexflow.enums.UserRole;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "users", indexes = {
+    @Index(name = "idx_email", columnList = "email", unique = true),
+    @Index(name = "idx_username", columnList = "username", unique = true)
+})
+@EntityListeners(AuditingEntityListener.class)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class User {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false, unique = true, length = 100)
+    private String username;
+    
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
+    
+    @Column(nullable = false)
+    private String password;
+    
+    @Column(nullable = false, length = 100)
+    private String fullName;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserRole role;
+    
+    @Column(nullable = false)
+    private Boolean active = true;
+    
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+}
